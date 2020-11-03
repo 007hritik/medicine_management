@@ -9,6 +9,18 @@
 </head>
 <body>
     <h1>Register</h1>
+    <!-- <ul>
+        <% if(typeof error != 'undefined') { %>
+            <% errors.forEach(error => { %>
+                <li> <%= error.message %> </li>
+            <%}) %>
+        <%}%>
+    </ul> -->
+    <ul>
+        <% if (typeof errors != 'undefined') { %> <% errors.forEach(error => { %>
+        <li><%= error.message %></li>
+        <% }) %> <% } %>
+      </ul>
     <form action="/users/register" method="POST">
         <div>
             <input type='text' id="user_name" name="name" placeholder="Name" required>
