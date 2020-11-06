@@ -1,0 +1,56 @@
+.bill-search-card {
+  display: flex;
+  flex-direction: column;
+    background-color: lightblue;
+    position: relative;
+    float: left;
+    height: 90vh;
+    width: 50%;
+}
+.bill-cart-card {
+  overflow: auto  ;
+    background-color:lightcoral ;
+    position: relative;
+    float: right;
+    height: 90vh;
+    width: 50%;
+}
+.product-cards {
+  grid-gap: 10px;
+  grid-template-columns: 30% 30% 30%;
+  display: grid;
+  margin: 10%;
+  width: 80%;
+  height: 30%;
+  background-color: grey;
+}
+.product-image {
+  grid-row: 1/4;
+  background-color: rgba(108, 108, 241, 0.685);
+}
+.product-name {
+  grid-column-start: 2;
+  grid-column-end: 4;
+  background-color: coral;
+}
+.product-price {
+  background-color: lightblue
+}
+.item-quantity {
+  background-color: lightgreen
+}
+.add-item {
+  background-color: aqua;
+}
+.items-remaining {
+  background-color: limegreen;
+}
+/* .cx {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin: 10px;
+} */
+
+.search-form {
+  margin: 0 auto;
+}

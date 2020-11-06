@@ -1,16 +1,22 @@
 require('dotenv').config();
 
 const {
-    Pool
+    Pool,
 } = require('pg');
 
-const isProduction = process.env.NODE_ENV === 'prodition';
+const isProduction = process.env.NODE_ENV === 'prodution';
 
 const connectionString = `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_DATABASE}`;
 
 const pool = new Pool({
-    connectionString: isProduction ? process.env.DATABASE_URL : connectionString
+    user: "postgres",
+    password: "Hritik9221",
+    database: "p1_medicine_management",
+    host: "localhost",
+    port: 5432
+
 });
+
 
 module.exports = {
     pool
