@@ -27,12 +27,12 @@ const {
 } = require("passport");
 
 
-PORT = process.env.PORT || 3026;
+PORT = process.env.PORT || 3028;
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({
     extended: false
 }));
-app.get('/', (req, res) => {
+app.get('/', checkIsnotAuthenticated, (req, res) => {
     res.render("index");
 });
 
@@ -54,6 +54,19 @@ app.get('/users/dashboard', checkIsnotAuthenticated, (req, res) => {
         user: req.user.user_name
     });
 });
+app.get('/users/inventory', checkIsnotAuthenticated, (req, res) => {
+    res.render('inventory', {
+        user: req.user.user_name
+    });
+});
+//add supplier
+app.get('/users/inventory/addsupplier', checkIsnotAuthenticated, (req, res) => {
+    res.render('addsupplier', {
+        user: req.user.user_name,
+
+    });
+});
+
 app.post("/users/register", async (req, res) => {
     let {
         name,
@@ -120,7 +133,6 @@ app.post("/users/register", async (req, res) => {
                         if (error) {
                             throw error;
                         } else {
-                            console.log(result.rows);
                             req.flash('success_msg', "You have been successfuly Registered please Login");
                             res.redirect('/users/login');
                         }
@@ -139,14 +151,45 @@ app.post(
         failureFlash: true
     })
 );
+app.post('/users/inventory/addsupplier', async (req, res) => {
+    let {
+        first_name,
+        email,
+        address,
+        prodcuts,
+        contact_no
+    } = req.body;
 
+    pool.query('INSERT INTO supplier(supplier_name , supplier_email , supplier_phone_no , supplier_address_line_1 , product_array ) values($1,$2,$3,$4,$5)', [first_name,
+        email,
+        address,
+        contact_no,
+        prodcuts.split(','),
+    ], (error, result) => {
+        if (error) {
+            if (error.code === '23505') {
+                req.flash('addsupplier_error', error.detail);
+                res.redirect('/users/inventory/addsupplier');
+            } else {
+                throw error;
+            }
+
+        } else {
+            req.flash('success_msg_addsupplier', "Supplier details have been saved");
+            res.redirect('addsupplier');
+        }
+
+    });
+
+
+});
 app.listen(PORT, () => {
     console.log(`Server is running of PORT ${PORT}`);
 });
 
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
-        res.redirect('/users/dashboard');
+        res.redirect('/users/index');
     } else {
         next();
     }
