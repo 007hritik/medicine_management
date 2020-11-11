@@ -55,7 +55,8 @@ function initialize(passport) {
 
     passport.serializeUser((user, done) => done(null, user.user_id));
 
-
+    // In deserializeUser that key is matched with the in memory array / database or any data resource.
+    // The fetched object is attached to the request object as req.user
 
     passport.deserializeUser((id, done) => {
         pool.query(`SELECT * FROM users WHERE user_id = $1`, [id], (err, results) => {
