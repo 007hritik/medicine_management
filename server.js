@@ -67,6 +67,43 @@ app.get('/users/inventory/addsupplier', checkIsnotAuthenticated, (req, res) => {
     });
 });
 
+
+app.get('/users/inventory/addproducts', checkIsnotAuthenticated, async (req, res) => {
+    pool.query('SELECT * FROM PRODUCT', (error, result) => {
+        if (error) {
+            throw error;
+        } else {
+            res.render('addproducts', {
+                user: req.user.user_name,
+                supplier_list: result.rows
+            });
+        }
+    });
+});
+app.get('/users/inventory/listsupplier', checkIsnotAuthenticated, async (req, res) => {
+    pool.query('SELECT * FROM supplier', (error, result) => {
+        if (error) {
+            throw error;
+        } else {
+            console.log(result.rows);
+            res.render('listsupplier', {
+                user: req.user.user_name,
+                supplier_list: result.rows
+
+            });
+        }
+    })
+
+});
+app.post('/users/inventory/listsupplier/:id', checkIsnotAuthenticated, async (req, res) => {
+    pool.query('DELETE FROM supplier where supplier_id = $1', [req.params.id], (error, result) => {
+        if (error) {
+            throw error;
+        } else {
+            res.redirect('/users/inventory/listsupplier');
+        }
+    });
+});
 app.post("/users/register", async (req, res) => {
     let {
         name,
@@ -177,6 +214,43 @@ app.post('/users/inventory/addsupplier', async (req, res) => {
         } else {
             req.flash('success_msg_addsupplier', "Supplier details have been saved");
             res.redirect('addsupplier');
+        }
+
+    });
+
+
+});
+app.post('/users/inventory/addproducts', checkIsnotAuthenticated, (req, res) => {
+    console.log(req.body);
+    let {
+        product_name,
+        supplier_price,
+        retail_price,
+        supplier_id,
+        quantity,
+        description
+    } = req.body;
+
+    pool.query('INSERT INTO product(product_name , supplier_id ,supplier_price , retail_price ,quantity,description) values($1,$2,$3,$4,$5,$6)', [
+        product_name,
+        parseInt(supplier_id),
+        supplier_price,
+        retail_price,
+        quantity,
+        description
+    ], (error, result) => {
+        if (error) {
+            if (error.code === '23503') {
+
+                req.flash('addproduct_error', error.detail);
+                res.redirect('/users/inventory/addproducts');
+            } else {
+                throw error;
+            }
+
+        } else {
+            req.flash('success_msg_addproduct', "Product  details have been saved");
+            res.redirect('/users/inventory/addproducts');
         }
 
     });
