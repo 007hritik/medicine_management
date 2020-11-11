@@ -353,15 +353,15 @@ img{
         </div>
 
         <div class="supplier-list">
-            
+            <h1>Supplier List</h1>
             <% supplier_list.forEach((item) => { %>
                 <li>
                 <div class="card-container">
-                <span class="pro">PRO</span>
+                <span class="pro"> id:<b> <%= item.supplier_id ;%></b></span>
                 <img class="round supplier-user-image" src="https://www.flaticon.com/svg/static/icons/svg/3737/3737431.svg" alt="user" />
                 <h3><%= item.supplier_name ;%></h3>
                 <h6><%= item.supplier_address_line_1 ;%></h6>
-                <p>User interface designer and <br/> front-end developer</p>
+                
                 <div class="buttons">
                     <button class="primary">
                         Email

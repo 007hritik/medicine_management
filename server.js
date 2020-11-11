@@ -95,6 +95,20 @@ app.get('/users/inventory/listsupplier', checkIsnotAuthenticated, async (req, re
     })
 
 });
+app.get('/users/inventory/listproducts', checkIsnotAuthenticated, async (req, res) => {
+    pool.query('SELECT * FROM product', (error, result) => {
+        if (error) {
+            throw error;
+        } else {
+            console.log(result.rows);
+            res.render('listproducts', {
+                user: req.user.user_name,
+                product_list: result.rows
+
+            });
+        }
+    });
+});
 app.post('/users/inventory/listsupplier/:id', checkIsnotAuthenticated, async (req, res) => {
     pool.query('DELETE FROM supplier where supplier_id = $1', [req.params.id], (error, result) => {
         if (error) {
